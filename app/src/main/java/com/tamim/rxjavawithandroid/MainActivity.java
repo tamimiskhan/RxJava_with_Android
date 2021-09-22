@@ -7,6 +7,8 @@ import androidx.recyclerview.widget.RecyclerView;
 import android.os.Bundle;
 import android.widget.TextView;
 
+import java.util.Date;
+
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import io.reactivex.Observable;
@@ -46,13 +48,24 @@ public class MainActivity extends AppCompatActivity {
         stockDataAdapter = new StockDataAdapter();
         recyclerView.setAdapter(stockDataAdapter);
 
-        Observable.just("APPLE", "GOOGLE", "TWITTER")
-                .subscribe(new Consumer<String>() {
-                    @Override
-                    public void accept(String stockSymbol) {
-                        stockDataAdapter.add(stockSymbol);
-                    }
-                });
+//        Observable.just("APPLE", "GOOGLE", "TWITTER")
+//                .subscribe(new Consumer<String>() {
+//                    @Override
+//                    public void accept(String stockSymbol) {
+//                        stockDataAdapter.add(stockSymbol);
+//                    }
+//                });
+        Observable.just(
+                new StockUpdate("GOOGLE", 12.43, new Date()),
+                new StockUpdate("APPL", 645.1, new Date()),
+                new StockUpdate("TWTR", 1.43, new Date())
+        ).subscribe(new Consumer<StockUpdate>() {
+            @Override
+            public void accept(StockUpdate stockUpdate) throws Exception {
+                stockDataAdapter.add(stockUpdate);
+            }
+        });
+
 
     }
 }
